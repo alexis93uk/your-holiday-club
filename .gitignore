@@ -1,0 +1,17 @@
+# Virtual Environment
+venv/
+__pycache__/
+
+# Secrets
+.env
+
+# Database
+*.sqlite
+*.db
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Compiled Python files
+*.pyc
