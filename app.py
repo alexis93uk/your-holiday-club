@@ -11,13 +11,13 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'some_secret_key')
 # Path to the SQLite database
 DATABASE = 'holiday_club.db'
 
-# Utility function to get a database connection
+
 def get_db_connection():
     conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row  # So we can use column names
+    conn.row_factory = sqlite3.Row  
     return conn
 
-# Initialize the database (Create table if it doesn't exist)
+
 def init_db():
     conn = get_db_connection()
     conn.execute('''
@@ -30,7 +30,7 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Insert some sample data if you like (5-10 short stories)
+
 def seed_data():
     conn = get_db_connection()
     
@@ -42,7 +42,7 @@ def seed_data():
         ("Sydney, Australia", "Visited the Opera House and enjoyed Bondi Beach.")
     ]
     
-    # Check if table is empty, then insert sample data
+    
     existing = conn.execute('SELECT COUNT(*) as count FROM stories').fetchone()
     if existing['count'] == 0:
         for location, story_text in sample_stories:
@@ -51,9 +51,9 @@ def seed_data():
         conn.commit()
     conn.close()
 
-# ---------------
-# ROUTE HANDLERS
-# ---------------
+
+# ROUTES
+
 
 @app.route('/')
 def index():
@@ -78,7 +78,7 @@ def contact():
         name = request.form.get('name')
         email = request.form.get('email')
         message = request.form.get('message')
-        # In a real app, you'd save to DB or send an email. We'll just flash for now.
+       
         flash("Thank you for your message. We'll get back to you soon!", "success")
         return redirect(url_for('contact'))
     return render_template('contact.html')
@@ -177,7 +177,7 @@ def delete_story(story_id):
         return redirect(url_for('view_story'))
     
     if request.method == 'POST':
-        # Confirm deletion
+        
         conn.execute('DELETE FROM stories WHERE id = ?', (story_id,))
         conn.commit()
         conn.close()
@@ -189,9 +189,8 @@ def delete_story(story_id):
     return render_template('deletestory.html', story=story)
 
 
-# ---------------
 # MAIN EXECUTION
-# ---------------
+
 if __name__ == '__main__':
     # Ensure DB and table exist, then seed sample data
     init_db()
@@ -199,4 +198,4 @@ if __name__ == '__main__':
     
     # Run the Flask app
     # For production, set debug=False; for development, debug=True
-    app.run(debug=True)
+    app.run(debug=False)

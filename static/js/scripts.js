@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Dark Mode Toggle
     const darkModeToggle = document.getElementById("dark-mode-toggle");
     if (darkModeToggle) {
         darkModeToggle.addEventListener("click", function () {
@@ -7,13 +6,13 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
         });
 
-        // Load Dark Mode preference
+      
         if (localStorage.getItem("darkMode") === "true") {
             document.body.classList.add("dark-mode");
         }
     }
 
-    // Smooth Scrolling for anchor links
+    
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener("click", function (event) {
             event.preventDefault();
@@ -23,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Mobile Menu Toggle
+    
     const menuToggle = document.getElementById("menu-toggle");
     const navLinks = document.querySelector(".nav-links");
     if (menuToggle && navLinks) {
