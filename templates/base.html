@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Holiday Club</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <button id="menu-toggle">☰</button>
+    <button id="dark-mode-toggle">🌙</button>
+    <div class="nav-logo">
+      <a href="{{ url_for('index') }}">Holiday Club</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+      <li><a href="{{ url_for('view_story') }}">View Stories</a></li>
+      <li><a href="{{ url_for('add_story') }}">Add Story</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <footer>
+    <p>© 2025 Holiday Club. All Rights Reserved.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+</body>
+</html>

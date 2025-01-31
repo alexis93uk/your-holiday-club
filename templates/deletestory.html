@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Delete Story</h1>
+<p>Are you sure you want to delete the story at {{ story.location }}?</p>
+<form method="POST" action="{{ url_for('delete_story', story_id=story.id) }}">
+  <button type="submit">Delete</button>
+  <a href="{{ url_for('view_story') }}">Cancel</a>
+</form>
+{% endblock %}

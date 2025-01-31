@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Travel Stories</h1>
+<ul class="stories-list">
+  {% for story in stories %}
+    <li>
+      <h2>{{ story.location }}</h2>
+      <p>{{ story.story_text[:100] }}...</p> 
+      <!-- Show just the first 100 chars as preview -->
+      <a href="{{ url_for('story_detail', story_id=story.id) }}">Read More</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
