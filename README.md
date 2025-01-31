@@ -31,7 +31,7 @@ The purpose is to create a collaborative environment for travelers to share tips
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/holiday-club.git
+   git clone https://github.com/alexis93uk/your-holiday-club.git
 
 
 ## Testing 
