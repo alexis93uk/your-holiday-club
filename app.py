@@ -192,7 +192,6 @@ def delete_story(story_id):
 # MAIN EXECUTION
 
 if __name__ == '__main__':
-    # Ensure DB and table exist, then seed sample data
     init_db()
     seed_data()
     
