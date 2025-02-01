@@ -42,3 +42,23 @@ The purpose is to create a collaborative environment for travelers to share tips
 6. Manual Testing
 7. Code Validation
 8. Deployment
+
+## User Stories
+Below are some user stories that guided the design and functionality of the application:
+
+1. Visitor: site visitor, can see a list of travel stories so they can discover new travel destinations. 
+2. Contributor: User who wants to share travel story.
+3. Returning User: The user who previously posted a story, HAS the option to edit the story when mistakesare  found, or just add extra information. 
+4. Account Owner: The owner of the story can delete the story. 
+5. Inquirer: If someone has any questions, they can contact administrators.
+
+## Features
+# 1. CRUD Operations
+Create: Add a story via the “Add Story” page.
+Read: View all stories in a list (viewstory.html) and detailed single pages (story.html).
+Update: Edit any existing story (editstory.html).
+Delete: Remove a story from the database (deletestory.html).
+
+# 2.Responsive Design
+A simple responsive layout ensures content is accessible on mobile and desktop devices.
+
