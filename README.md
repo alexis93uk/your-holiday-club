@@ -33,15 +33,12 @@ The purpose is to create a collaborative environment for travelers to share tips
    ```bash
    git clone https://github.com/alexis93uk/your-holiday-club.git
 
-
-## Testing 
-## Functionality Test:
-Open the home page and navigate to Add Story. 
-Add a new story and verify it appears in View Stories.
-Edit and delete existing stories to confirm these features work correctly.
-## Responsiveness:
-Test in various screen sizes or use your browser’s DevTools for mobile simulation.
-## Data Management:
-Confirm that invalid forms (e.g., empty location or story) produce error flash messages.
-## Accessibility:
-Inspect that forms have label tags and the site is keyboard navigable.
+# Table of Contents
+1. User Stories
+2. Features
+3. Technologies
+4. Installation & Usage
+5. Database Structure
+6. Manual Testing
+7. Code Validation
+8. Deployment
