@@ -14,8 +14,8 @@ Holiday Club is a simple Flask-based web application where users can share their
 
 The purpose is to create a collaborative environment for travelers to share tips, destinations, and experiences, helping one another plan future trips.
 
-# Table of Contents
-1. User Stories
+## Table of Contents
+1. [User Stories] (#User-Stories)
 2. Features
 3. Technologies
 4. Database Structure
