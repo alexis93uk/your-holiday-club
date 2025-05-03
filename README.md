@@ -148,26 +148,25 @@ Below is an ER diagram illustrating tables, keys, and relationships:
 
 **Documenting the full Heroku deployment process:**
  
-   ### 1. On Heroku create an account and log in. 
-   ### 2. Click new and create new app. 
-   ### 3. Choose a unique name for your app, and click on create App
-   ### 4. From terminal type  $ heroku login
-   ### 5. Create requirements.txt 
-   ### 6. echo "web: gunicorn app:app" > Procfile
-   ### 7. Initiliaze git:
-   ###               git init
-   ###               git add .
-   ###               git commit -m "Initial commit"
-   ### 8. Connect to Heroku remote:
-   ###              heroku login
-   ###              heroku git:remote -a your-holiday-club
-   ### 9. Add Config Vars (in Heroku dashboard):
-   ###           SECRET_KEY = your_production_secret
-   ###           DATABASE = holiday_club.db
-   ### 10. type $ git push heroku main
-   ### 11. heroku open
-   ### 12. In the app dashboard, under Settings click on Reveal Config Vars
-   ### 13. Once the build is complete, go back to Heroku and click on Open App
+- 1. On Heroku create an account and log in. 
+- 2. Click new and create new app. 
+- 3. Choose a unique name for your app, and click on create App
+- 4. From terminal type  $ heroku login
+- 6. echo "web: gunicorn app:app" > Procfile
+- 7. Initiliaze git:
+- git init
+- git add .
+- git commit -m "Initial commit"
+- 8. Connect to Heroku remote:
+- heroku login
+- heroku git:remote -a your-holiday-club
+- 9. Add Config Vars (in Heroku dashboard):
+- SECRET_KEY = your_production_secret
+- DATABASE = holiday_club.db
+- 10. type $ git push heroku main
+- 11. heroku open
+- 12. In the app dashboard, under Settings click on Reveal Config Vars
+- 13. Once the build is complete, go back to Heroku and click on Open App
 
 
 
