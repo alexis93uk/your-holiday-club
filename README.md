@@ -143,6 +143,26 @@ Below is an ER diagram illustrating tables, keys, and relationships:
 
 ---
 
+## Environment & Secrets Management
+### This project uses environment variables and a properly configured .gitignore file to protect all sensitive information, fulfilling the security requirements for Full Stack development.
+
+**Created a .env file to securely store:**
+*SECRET_KEY – used by Flask for session management*
+*DATABASE – SQLite database path (can be swapped for production)*
+
+**Loaded .env in app.py:**
+*from dotenv import load_dotenv*
+*load_dotenv()*
+
+**Accessed secrets securely:**
+*app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')*
+*DATABASE = os.getenv('DATABASE', 'holiday_club.db')*
+
+**.gitignore includes:**
+<p align="center">
+  <img src="static/images/secrets.png" alt="secrets" width="600">
+</p>
+
 ## Deployment
 
 **Documenting the full Heroku deployment process:**
