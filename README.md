@@ -160,7 +160,7 @@ Below is an ER diagram illustrating tables, keys, and relationships:
 
 **.gitignore includes:**
 <p align="center">
-  <img src="static/images/secrets.png" alt="secrets" width="600">
+  <img src="static/images/secrets.png" alt="secrets" width="200">
 </p>
 
 ## Deployment
