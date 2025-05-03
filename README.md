@@ -3,7 +3,7 @@ https://your-holiday-club-d5454424f4de.herokuapp.com/
 **Author**: Aleksandar Husagic  
 
 <p align="center">
-  <img src="static/images/homepage.jpg" alt="Home Page" width="600">
+  <img src="static/images/homepage.JPG" alt="Home Page" width="600">
 </p>
 
 Holiday Club is a community-driven Flask web application where travelers register, share, and explore holiday stories. It demonstrates a fully relational design (users ↔ stories), is mobile-responsive, supports dark mode, and includes a full manual testing plan to verify functionality, usability, data integrity, and deployment.
