@@ -80,16 +80,13 @@ This relational schema satisfies the requirement for relevant, normalized tables
   - `id` INTEGER PK  
   - `username` TEXT UNIQUE  
   - `email` TEXT  
-  - `password_hash` TEXT  
-  - `created_at` DATETIME (optional timestamp)  
+  - `password_hash` TEXT    
 
 - **`stories`**  
   - `id` INTEGER PK  
   - `user_id` INTEGER FK → `users.id`  
   - `location` TEXT  
-  - `story_text` TEXT  
-  - `created_at` DATETIME  
-  - `updated_at` DATETIME  
+  - `story_text` TEXT   
 
 Each story belongs to exactly one user. We seed a `default_user` on first run and link sample stories, demonstrating the one-to-many relationship in practice.
 
