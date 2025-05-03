@@ -98,7 +98,7 @@ Each story belongs to exactly one user. We seed a `default_user` on first run an
 Below is an ER diagram illustrating tables, keys, and relationships:
 
 <p align="center">
-  <img src="images/diagram.png" alt="ER Diagram" width="600">
+  <img src="static/images/diagram.png" alt="ER Diagram" width="600">
 </p>
 
 **Additional tables** (for future expansion):
