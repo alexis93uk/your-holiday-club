@@ -63,32 +63,32 @@ def init_db():
 def seed_data():
     """
     Seed a default user and some sample stories if the DB is empty.
+    This uses INSERT OR IGNORE so that concurrent workers
+    don’t both crash trying to insert the same username.
     """
     conn = get_db_connection()
 
-    # 1) Default user
+    # 1) Ensure default_user exists (won't error if already there)
+    conn.execute(
+        "INSERT OR IGNORE INTO users (username, email, password_hash) "
+        "VALUES (?, ?, ?)",
+        ("default_user", "user@example.com", generate_password_hash("password"))
+    )
+    conn.commit()
+
+    # fetch its id now that we’ve guaranteed it’s there
     user = conn.execute(
         "SELECT id FROM users WHERE username = ?",
         ("default_user",)
     ).fetchone()
-    if user is None:
-        conn.execute(
-            "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
-            ("default_user", "user@example.com", generate_password_hash("password"))
-        )
-        conn.commit()
-        user = conn.execute(
-            "SELECT id FROM users WHERE username = ?",
-            ("default_user",)
-        ).fetchone()
+    user_id = user["id"]
 
-    user_id = user['id']
-
-    # 2) Sample stories
+    # 2) Seed sample stories for that user if none yet exist
     count = conn.execute(
         "SELECT COUNT(*) AS c FROM stories WHERE user_id = ?",
         (user_id,)
-    ).fetchone()['c']
+    ).fetchone()["c"]
+
     if count == 0:
         sample_stories = [
             (user_id, "Paris, France",  "I visited the Eiffel Tower and enjoyed croissants by the Seine."),
@@ -97,14 +97,16 @@ def seed_data():
             (user_id, "New York, USA",  "Loved the hustle of Times Square and a stroll in Central Park."),
             (user_id, "Sydney, Australia", "Visited the Opera House and enjoyed Bondi Beach.")
         ]
+        # again use OR IGNORE just to be safe if two workers race here too
         for uid, loc, txt in sample_stories:
             conn.execute(
-                "INSERT INTO stories (user_id, location, story_text) VALUES (?, ?, ?)",
+                "INSERT OR IGNORE INTO stories (user_id, location, story_text) VALUES (?, ?, ?)",
                 (uid, loc, txt)
             )
         conn.commit()
 
     conn.close()
+
 
 
 # ----- Immediately ensure DB is initialized & seeded on startup -----
