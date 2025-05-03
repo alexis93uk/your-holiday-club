@@ -98,10 +98,12 @@ Each story belongs to exactly one user. We seed a `default_user` on first run an
 Below is an ER diagram illustrating tables, keys, and relationships:
 
 <p align="center">
-  <img src="A_Entity-Relationship_(ER)_diagram_in_the_image_il.png" alt="ER Diagram" width="600">
+  <img src="images/diagram.png" alt="ER Diagram" width="600">
 </p>
 
 **Additional tables** (for future expansion):
+
+ These tables are part of the project’s data model design to demonstrate foresight and expansion capability. Although not fully implemented in the frontend, they reflect a scalable architecture that could support future features like story tagging or comments.
 
 | Table                | Columns                                                                                                              |
 |----------------------|----------------------------------------------------------------------------------------------------------------------|
@@ -145,9 +147,30 @@ Below is an ER diagram illustrating tables, keys, and relationships:
 ## Deployment
 
 Documenting the full Heroku deployment process:
+ 
+   # 1. On Heroku create an account and log in. 
+   # 2. Click new and create new app. 
+   # 3. Choose a unique name for your app, and click on create App
+   # 4. From terminal type  $ heroku login
+   # 5. Create requirements.txt 
+   # 6. echo "web: gunicorn app:app" > Procfile
+   # 7. Initiliaze git:
+   #               git init
+   #               git add .
+   #               git commit -m "Initial commit"
+   # 8. Connect to Heroku remote:
+   #               heroku login
+   #               heroku git:remote -a your-holiday-club
+   # 9. Add Config Vars (in Heroku dashboard):
+   #           SECRET_KEY = your_production_secret
+   #           DATABASE = holiday_club.db
+   # 10. type $ git push heroku main
+   # 11. heroku open
+   # 12. In the app dashboard, under Settings click on Reveal Config Vars
+   # 13. Once the build is complete, go back to Heroku and click on Open App
 
-1. **Install Heroku CLI**  
-   ```bash
-   # macOS/Linux
-   brew tap heroku/brew && brew install heroku
-   # Windows: use the official installer
+
+
+## Disclaimer
+
+This project was created for educational use only.
