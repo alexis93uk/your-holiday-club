@@ -88,6 +88,70 @@ Each story record belongs to exactly one user. I seed a `default_user` on first 
 
 ---
 
+## Database Structure & Data Model (2.1 & 2.2)
+
+**Tables & Columns**:
+
+| Table               | Columns                                                                                        |
+|---------------------|------------------------------------------------------------------------------------------------|
+| **users**           | `id` PK, `username` UNIQUE, `email`, `password_hash`, `created_at`                              |
+| **stories**         | `id` PK, `user_id` FK→users.id, `location`, `story_text`, `created_at`, `updated_at`            |
+| **comments**        | `id` PK, `story_id` FK→stories.id, `user_id` FK→users.id, `comment_text`, `created_at`          |
+| **tags**            | `id` PK, `name` UNIQUE                                                                         |
+| **story_tags**      | `story_id` FK→stories.id, `tag_id` FK→tags.id (composite PK)                                    |
+| **contact_messages**| `id` PK, `name`, `email`, `message`, `created_at`                                              |
+
+**ER Diagram**:
+
+```mermaid
+erDiagram
+    users ||--o{ stories           : owns
+    users ||--o{ comments          : writes
+    users ||--o{ contact_messages  : sends
+
+    stories ||--o{ comments        : has
+    stories ||--o{ story_tags      : tagged_in
+    tags    ||--o{ story_tags      : tags
+
+    users {
+      integer id PK
+      string  username
+      string  email
+      string  password_hash
+      datetime created_at
+    }
+    stories {
+      integer id PK
+      integer user_id FK
+      string  location
+      text    story_text
+      datetime created_at
+      datetime updated_at
+    }
+    comments {
+      integer id PK
+      integer story_id FK
+      integer user_id FK
+      text    comment_text
+      datetime created_at
+    }
+    tags {
+      integer id PK
+      string  name
+    }
+    story_tags {
+      integer story_id FK
+      integer tag_id FK
+    }
+    contact_messages {
+      integer id PK
+      string  name
+      string  email
+      text    message
+      datetime created_at
+    }
+
+
 ## Manual Testing 
 
 Criteria 1.5 is met through the following manual test plan, covering functionality, usability, responsiveness, and data integrity.
