@@ -8,12 +8,18 @@ from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
-# Load environment variables
+# Load environment variables from .env
 load_dotenv()
 
 # ----- App Configuration -----
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'change_this_in_production')
+
+# Require a real SECRET_KEY in all environments
+secret = os.getenv('SECRET_KEY')
+if not secret:
+    raise RuntimeError("SECRET_KEY environment variable is required")
+app.config['SECRET_KEY'] = secret
+
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_PERMANENT'] = False
 
@@ -21,34 +27,11 @@ app.config['SESSION_PERMANENT'] = False
 DATABASE = os.getenv('DATABASE', 'holiday_club.db')
 
 
-# ----- Authentication Helpers -----
-def login_required(f):
-    @wraps(f)
-    def wrapped(*args, **kwargs):
-        if 'user_id' not in session:
-            flash("Please log in first.", "error")
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return wrapped
-
-
-@app.before_request
-def load_logged_in_user():
-    """Load user object into g.user if logged in."""
-    user_id = session.get('user_id')
-    g.user = None
-    if user_id:
-        conn = get_db_connection()
-        g.user = conn.execute(
-            "SELECT * FROM users WHERE id = ?", (user_id,)
-        ).fetchone()
-        conn.close()
-
-
 # ----- Database Helpers -----
 def get_db_connection():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
+    # ensure FKs are enforced
     conn.execute('PRAGMA foreign_keys = ON;')
     return conn
 
@@ -56,7 +39,6 @@ def get_db_connection():
 def init_db():
     """Create users and stories tables (if they don’t exist)."""
     conn = get_db_connection()
-
     conn.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -109,16 +91,11 @@ def seed_data():
     ).fetchone()['c']
     if count == 0:
         sample_stories = [
-            (user_id, "Paris, France",
-             "I visited the Eiffel Tower and enjoyed croissants by the Seine."),
-            (user_id, "Tokyo, Japan",
-             "I tried sushi at Tsukiji market and explored Shibuya Crossing."),
-            (user_id, "Cairo, Egypt",
-             "Saw the pyramids at Giza and experienced the local markets."),
-            (user_id, "New York, USA",
-             "Loved the hustle of Times Square and a stroll in Central Park."),
-            (user_id, "Sydney, Australia",
-             "Visited the Opera House and enjoyed Bondi Beach.")
+            (user_id, "Paris, France",  "I visited the Eiffel Tower and enjoyed croissants by the Seine."),
+            (user_id, "Tokyo, Japan",   "I tried sushi at Tsukiji market and explored Shibuya Crossing."),
+            (user_id, "Cairo, Egypt",   "Saw the pyramids at Giza and experienced the local markets."),
+            (user_id, "New York, USA",  "Loved the hustle of Times Square and a stroll in Central Park."),
+            (user_id, "Sydney, Australia", "Visited the Opera House and enjoyed Bondi Beach.")
         ]
         for uid, loc, txt in sample_stories:
             conn.execute(
@@ -128,6 +105,37 @@ def seed_data():
         conn.commit()
 
     conn.close()
+
+
+# ----- Run ONCE before the very first request (e.g. under Gunicorn) -----
+@app.before_first_request
+def setup_db():
+    init_db()
+    seed_data()
+
+
+# ----- Authentication Helpers -----
+def login_required(f):
+    @wraps(f)
+    def wrapped(*args, **kwargs):
+        if 'user_id' not in session:
+            flash("Please log in first.", "error")
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return wrapped
+
+
+@app.before_request
+def load_logged_in_user():
+    """Load user object into g.user if logged in."""
+    user_id = session.get('user_id')
+    g.user = None
+    if user_id:
+        conn = get_db_connection()
+        g.user = conn.execute(
+            "SELECT * FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
+        conn.close()
 
 
 # ----- Authentication Routes -----
@@ -206,7 +214,6 @@ def about():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        # We’re just flashing (no persistence)
         flash("Thank you for your message. We'll get back to you soon!", "success")
         return redirect(url_for('contact'))
     return render_template('contact.html')
@@ -280,7 +287,6 @@ def edit_story(story_id):
         flash("Story not found!", "error")
         return redirect(url_for('view_story'))
 
-    # Ownership check
     if story['user_id'] != g.user['id']:
         conn.close()
         flash("You can only modify your own stories.", "error")
@@ -321,7 +327,6 @@ def delete_story(story_id):
         flash("Story not found!", "error")
         return redirect(url_for('view_story'))
 
-    # Ownership check
     if story['user_id'] != g.user['id']:
         conn.close()
         flash("You can only delete your own stories.", "error")
@@ -338,7 +343,7 @@ def delete_story(story_id):
     return render_template('deletestory.html', story=story)
 
 
-# ----- Main Execution -----
+# ----- Main Execution (dev only) -----
 if __name__ == '__main__':
     init_db()
     seed_data()
