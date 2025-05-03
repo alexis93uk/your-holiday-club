@@ -101,7 +101,7 @@ Each story record belongs to exactly one user. I seed a `default_user` on first 
 | **story_tags**      | `story_id` FK→stories.id, `tag_id` FK→tags.id (composite PK)                                    |
 | **contact_messages**| `id` PK, `name`, `email`, `message`, `created_at`                                              |
 
-**ER Diagram**:
+### ER Diagram
 
 ```mermaid
 erDiagram
