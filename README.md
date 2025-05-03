@@ -1,8 +1,8 @@
-# Holiday Club
-https://your-holiday-club-d5454424f4de.herokuapp.com/
+# Holiday Club  
+https://your-holiday-club-d5454424f4de.herokuapp.com/  
 **Author**: Aleksandar Husagic  
 
-Holiday Club is a simple Flask-based web application where users can share their holiday travel stories. The purpose is to create a collaborative environment for travelers to exchange tips, destinations, and experiences, helping each other plan their future trips.
+Holiday Club is a community-driven Flask web application where travelers register, share, and explore holiday stories. It demonstrates a fully relational design (users ↔ stories) and covers manual test procedures for functionality, usability, responsiveness, and data management.
 
 ---
 
@@ -11,237 +11,126 @@ Holiday Club is a simple Flask-based web application where users can share their
 2. [User Stories](#user-stories)  
 3. [Features](#features)  
 4. [Technologies](#technologies)  
-5. [Database Structure](#database-structure)  
-6. [Manual Testing](#manual-testing)  
+5. [Database Structure & 1.4 Criterion](#database-structure--14-criterion)  
+6. [Manual Testing & 1.5 Criterion](#manual-testing--15-criterion)  
 7. [Code Validation](#code-validation)  
 8. [Deployment](#deployment)  
 9. [Installation & Usage (Local)](#installation--usage-local)  
-10. [License](#license)
-
----
-https://your-holiday-club-d5454424f4de.herokuapp.com/
-**Author**: Aleksandar Husagic  
-
-Holiday Club is a simple Flask-based web application where users can share their holiday travel stories. The purpose is to create a collaborative environment for travelers to exchange tips, destinations, and experiences, helping each other plan their future trips.
-
----
-
-## Table of Contents
-1. [Project Description](#project-description)  
-2. [User Stories](#user-stories)  
-3. [Features](#features)  
-4. [Technologies](#technologies)  
-5. [Database Structure](#database-structure)  
-6. [Manual Testing](#manual-testing)  
-7. [Code Validation](#code-validation)  
-8. [Deployment](#deployment)  
-9. [Installation & Usage (Local)](#installation--usage-local)  
-10. [License](#license)
+10. [License](#license)  
 
 ---
 
 ## Project Description
 
-Holiday Club is a straightforward Flask-based web application where users can:
-Holiday Club is a straightforward Flask-based web application where users can:
+Holiday Club allows registered users to:
 
-- View all holiday stories.  
-- Read each story in detail.  
-- Add a new holiday story.  
-- Edit an existing story.  
-- Delete a story.  
-- View all holiday stories.  
-- Read each story in detail.  
-- Add a new holiday story.  
-- Edit an existing story.  
-- Delete a story.  
+- **View** all holiday stories in a responsive grid.  
+- **Read** each story in detail (with images).  
+- **Add** a new holiday story.  
+- **Edit** their own stories.  
+- **Delete** their own stories.  
 
-It fosters a **community-driven** space for sharing travel experiences and advice.
+It fosters a collaborative environment for sharing travel experiences and tips.
 
 ---
 
 ## User Stories
 
-Below are some user stories that guided the design and functionality of the application:
-
-1. **Visitor**: As a site visitor, I want to see a list of travel stories so I can discover new travel destinations.  
-2. **Contributor**: As a user who wants to share a travel story, I need a simple way to add my story so that others can read it.  
-3. **Returning User**: As a user who previously posted a story, I want an option to edit the story if I find mistakes or wish to add more information.  
-4. **Account Owner**: As the owner of a story, I want the ability to delete it if I no longer want it published.  
-5. **Inquirer**: As someone with questions, I want a contact form to reach administrators.
+1. **Visitor**: See a list of travel stories to discover new destinations.  
+2. **Contributor**: Register and add a travel story for others to read.  
+3. **Returning User**: Edit my previously posted story to correct or add details.  
+4. **Account Owner**: Delete my own story if I choose.  
+5. **Inquirer**: Use the contact form to send feedback or questions.
 
 ---
 
 ## Features
 
-1. **CRUD Operations**  
-   - **Create**: Add a story via the “Add Story” page.  
-   - **Read**: View all stories in a list (`viewstory.html`) and detailed single pages (`story.html`).  
-   - **Update**: Edit any existing story (`editstory.html`).  
-   - **Delete**: Remove a story from the database (`deletestory.html`).
-
-2. **Responsive Design**  
-   - A simple responsive layout ensures content is accessible on mobile and desktop devices.
-
-3. **Flash Messages**  
-   - The app provides immediate feedback (success/error) to users after each action.
-
-4. **Sample Data**  
-   - The application seeds a few sample travel stories upon first run.
-
-5. **Contact Form**  
-   - A basic contact form allows users to submit inquiries.
-
----
-It fosters a **community-driven** space for sharing travel experiences and advice.
-
----
-
-## User Stories
-
-Below are some user stories that guided the design and functionality of the application:
-
-1. **Visitor**: As a site visitor, I want to see a list of travel stories so I can discover new travel destinations.  
-2. **Contributor**: As a user who wants to share a travel story, I need a simple way to add my story so that others can read it.  
-3. **Returning User**: As a user who previously posted a story, I want an option to edit the story if I find mistakes or wish to add more information.  
-4. **Account Owner**: As the owner of a story, I want the ability to delete it if I no longer want it published.  
-5. **Inquirer**: As someone with questions, I want a contact form to reach administrators.
-
----
-
-## Features
-
-1. **CRUD Operations**  
-   - **Create**: Add a story via the “Add Story” page.  
-   - **Read**: View all stories in a list (`viewstory.html`) and detailed single pages (`story.html`).  
-   - **Update**: Edit any existing story (`editstory.html`).  
-   - **Delete**: Remove a story from the database (`deletestory.html`).
-
-2. **Responsive Design**  
-   - A simple responsive layout ensures content is accessible on mobile and desktop devices.
-
-3. **Flash Messages**  
-   - The app provides immediate feedback (success/error) to users after each action.
-
-4. **Sample Data**  
-   - The application seeds a few sample travel stories upon first run.
-
-5. **Contact Form**  
-   - A basic contact form allows users to submit inquiries.
+- **Authentication**: Register, log in, log out.  
+- **Authorization**: Only story authors may edit/delete their own entries.  
+- **CRUD**: Create, read, update, and delete stories.  
+- **Responsive Design**: Adapts to mobile and desktop, includes a hamburger menu.  
+- **Dark-Mode Toggle**: Switch between light and dark themes.  
+- **Flash Messages**: Success/error feedback after every action.  
+- **Seed Data**: A default user and sample stories are inserted on first run.  
+- **Contact Form**: Visitors may send inquiries to the admin.
 
 ---
 
 ## Technologies
 
-- **Python** (Flask)  
-- **SQLite** (Database)  
-- **HTML5 / CSS3 / minimal JS**  
-- **Deployment**: Heroku (or any similar hosting)
+- **Backend**: Python, Flask  
+- **Database**: SQLite (via `sqlite3`)  
+- **Templating**: Jinja2 (HTML)  
+- **Styling**: CSS3, minimal JavaScript for toggles  
+- **Wsgi Server**: Gunicorn  
+- **Hosting**: Heroku  
 
 ---
 
-## Database Structure
+## Database Structure 
 
-This app uses a single `stories` table in **`holiday_club.db`**. The simplified schema is as follows:
+relational schema that satisfies criteria 1.4:
 
-| Column     | Type         | Description                               |
-|------------|--------------|-------------------------------------------|
-| `id`       | Integer (PK) | Auto-increment primary key                |
-| `location` | Text         | Name of the travel destination            |
-| `story_text` | Text       | Detailed story or experience              |
+- **`users`**  
+  - `id` INTEGER PK,  
+  - `username` TEXT UNIQUE,  
+  - `email` TEXT,  
+  - `password_hash` TEXT  
 
-A quick visual representation:
+- **`stories`**  
+  - `id` INTEGER PK,  
+  - `user_id` INTEGER FK → `users.id`,  
+  - `location` TEXT,  
+  - `story_text` TEXT  
 
-stories ┌─────────────┐ │ id (PK) │ │ location │ │ story_text │ └─────────────┘
-
-
+Each story record belongs to exactly one user. I seed a `default_user` on first run and link sample stories, demonstrating the one-to-many relationship in practice.
 
 ---
 
-## Manual Testing
+## Manual Testing 
 
-Below are some manual test procedures to verify the app’s functionality:
+Criteria 1.5 is met through the following manual test plan, covering functionality, usability, responsiveness, and data integrity.
 
-1. **Home Page Test**  
-   - **Step**: Navigate to `/` (index page).  
-   - **Result**: Displays a welcome message “Welcome to Holiday Club” and navigation links.
-
-2. **View Stories**  
-   - **Step**: Click “View Stories” link from navbar.  
-   - **Result**: A list of existing sample stories (5 seeded) is displayed. Each item shows the location and a preview of the story text.
-
-3. **Add New Story**  
-   - **Step**: Click “Add Story” link, fill out the location and story text, then submit.  
-   - **Result**: Displays a success flash message “Story added successfully!” and redirects to “View Stories.” The new story appears in the list.
-
-4. **View Single Story**  
-   - **Step**: From “View Stories,” click “Read More” on any listed story.  
-   - **Result**: A detail page (`story.html`) shows the story’s title (location) and the entire text, plus placeholder images.
-
-5. **Edit Existing Story**  
-   - **Step**: While on the detail page or the view list, click “Edit.” Change the location or text, then submit.  
-   - **Result**: Success flash message “Story updated successfully!” and the updated details appear on “View Stories.”
-
-6. **Delete a Story**  
-   - **Step**: Click “Delete” on a story. Confirm the deletion.  
-   - **Result**: The story is removed from the database, and a success message “Story deleted successfully!” is shown. The story no longer appears in “View Stories.”
-
-7. **Contact Form**  
-   - **Step**: Go to “Contact,” fill in Name, Email, and Message, then submit.  
-   - **Result**: Displays a flash message “Thank you for your message. We’ll get back to you soon!”
-
-8. **Error Handling**  
-   - **Step**: Try adding a story without a location or text.  
-   - **Result**: Displays a flash message “Please provide both location and story text.”
-
-9. **Responsiveness**  
-   - **Step**: Resize the browser window or use mobile view in DevTools.  
-   - **Result**: Navbar collapses or stacks, images scale properly, and the layout remains usable.
-
-By performing these checks, we confirm that each feature works as intended from the user’s perspective.
+| Area                       | Test Case                  | Steps                                                                                              | Expected Result                                                                                       |
+|----------------------------|----------------------------|----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| **Home Page**              | Load Home                  | 1. Navigate to `/`                                                                                 | Hero banner, “View Stories” button, navbar links appear.                                              |
+| **Navigation**             | Nav Links                  | 1. Click About, Contact, Stories, Login/Register                                                   | Each page loads with correct content.                                                                 |
+| **About Page**             | Content & Layout           | 1. Go to `/about`                                                                                  | Mission, future plans, quotes grid render correctly.                                                  |
+| **Contact Form**           | Successful Submission      | 1. Go to `/contact`<br>2. Fill Name, Email, Message<br>3. Submit                                   | Flash “Thank you for your message…”.                                                                   |
+|                            | Validation Error           | 1. Submit empty form                                                                               | Flash error about required fields.                                                                    |
+| **Authentication**         | Register New User          | 1. `/register` → valid data → Submit                                                               | Flash “Registration successful!”, redirect to login.                                                  |
+|                            | Duplicate Username         | 1. Register same username again                                                                     | Flash “Username already taken.”                                                                        |
+|                            | Login / Logout             | 1. `/login` → correct creds → Home, navbar shows “Hi, USER”<br>2. Click Logout                       | Flash “Welcome, USER!” then “You’ve been logged out.”                                                  |
+|                            | Invalid Credentials        | 1. `/login` → wrong creds                                                                          | Flash “Invalid credentials.”                                                                          |
+| **View Stories**           | List Seeded Stories        | 1. `/viewstory`                                                                                   | Stories display in grid with location, author, excerpt, “Read More.”                                   |
+| **Story Detail**           | View Single Story          | 1. Click “Read More”                                                                               | Detail page shows full text, author, images, Edit/Delete if owner.                                     |
+|                            | 404 Handling               | 1. `/story/9999`                                                                                   | Flash “Story not found!”, redirect to `/viewstory`.                                                   |
+| **Add Story**              | Successful Add             | 1. Login<br>2. `/addstory` → fill fields → Submit                                                  | Flash “Story added successfully!”, story appears in list.                                             |
+|                            | Validation Error           | 1. Submit `/addstory` empty                                                                        | Flash “Please fill in all fields.”                                                                     |
+|                            | Unauthorized Redirect      | 1. While logged out, request `/addstory`                                                           | Redirect to `/login` with flash “Please log in first.”                                                 |
+| **Edit Story**             | Successful Edit            | 1. Login as owner<br>2. `/editstory/<id>` → change → Submit                                        | Flash “Story updated successfully!”, changes show.                                                    |
+|                            | Validation Error           | 1. `/editstory/<id>` empty                                                                         | Flash “Please fill out all fields.”                                                                    |
+|                            | Unauthorized Access        | 1. Login as different user<br>2. Access `/editstory/<other_id>`                                     | Flash “You can only modify your own stories.”                                                          |
+| **Delete Story**           | Successful Delete          | 1. Login as owner<br>2. `/deletestory/<id>` → confirm                                              | Flash “Story deleted successfully!”, story removed.                                                   |
+|                            | Unauthorized Access        | 1. Login as different user<br>2. Delete another’s story                                            | Flash “You can only delete your own stories.”                                                          |
+| **Responsive Layout**      | Mobile View                | 1. Resize < 768px or DevTools mobile emulation                                                     | Navbar collapses, grids adjust to 1–2 columns.                                                         |
+| **Dark Mode**              | Toggle Dark Mode           | 1. Click 🌙 button                                                                                 | Dark-mode styles apply site-wide.                                                                      |
+| **Data Persistence**       | Refresh & Re-login         | 1. Add/Edit/Delete → refresh → logout/login                                                         | All changes persist correctly.                                                                         |
 
 ---
 
 ## Code Validation
 
-### HTML & CSS Validation
-- **HTML**: Validated using [W3C Markup Validation](https://validator.w3.org/).  
-- **CSS**: Validated using [W3C CSS Validator](https://jigsaw.w3.org/css-validator/). 
-
-*(Include screenshots or mention results as appropriate.)*
-
-### Python (PEP8)
-- Ensured Python code is **PEP8**-compliant (indentation, variable naming) using a linter such as **Flake8** or **Black**.
+- **HTML/CSS** validated via [W3C Markup Validator](https://validator.w3.org/) and [W3C CSS Validator](https://jigsaw.w3.org/css-validator/).  
+- **Python** code conforms to **PEP8** (checked with `flake8`/`black`) and includes compound statements (`if`/`loops`).  
+- No broken links, no debug mode in production, secrets are in environment variables.
 
 ---
 
 ## Deployment
 
-Below is how the project was deployed to **Heroku**:
-
 1. **Heroku Setup**  
-   - Install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).  
-   - Log in via `heroku login`.
-
-2. **Create the Heroku App**  
    ```bash
+   heroku login
    heroku create your-holiday-club
-
-3. **Procfile & Requirements**
-   - Include a Procfile with web: gunicorn app:app
-   - Ensure requirements.txt has Flask, gunicorn, etc.
-
-4. **Set Environment Variables**
-   heroku config:set SECRET_KEY="your_secret_key"
-   heroku config:set DEBUG_MODE="False"
-
-5. **Push to Heroku**
-   git push heroku main
-
-6. **Open the App**
-    heroku open
-   https://your-holiday-club-d5454424f4de.herokuapp.com/ 
-7. **Troubleshooting**
-    Use heroku logs --tail to check logs if something goes wrong.
-
-Continue: 
