@@ -103,54 +103,7 @@ Each story record belongs to exactly one user. I seed a `default_user` on first 
 
 ### ER Diagram
 
-```mermaid
-erDiagram
-    users ||--o{ stories           : owns
-    users ||--o{ comments          : writes
-    users ||--o{ contact_messages  : sends
-
-    stories ||--o{ comments        : has
-    stories ||--o{ story_tags      : tagged_in
-    tags    ||--o{ story_tags      : tags
-
-    users {
-      integer id PK
-      string  username
-      string  email
-      string  password_hash
-      datetime created_at
-    }
-    stories {
-      integer id PK
-      integer user_id FK
-      string  location
-      text    story_text
-      datetime created_at
-      datetime updated_at
-    }
-    comments {
-      integer id PK
-      integer story_id FK
-      integer user_id FK
-      text    comment_text
-      datetime created_at
-    }
-    tags {
-      integer id PK
-      string  name
-    }
-    story_tags {
-      integer story_id FK
-      integer tag_id FK
-    }
-    contact_messages {
-      integer id PK
-      string  name
-      string  email
-      text    message
-      datetime created_at
-    }
-
+![Holiday Club ER Diagram](A_Entity-Relationship_(ER)_diagram_in_the_image_il.png)
 
 ## Manual Testing 
 
