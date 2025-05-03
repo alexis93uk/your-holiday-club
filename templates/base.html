@@ -12,17 +12,15 @@
 <body>
   <!-- NAVBAR -->
   <nav class="navbar">
-    <!-- Mobile menu toggle -->
     <button id="menu-toggle" aria-label="Toggle menu">☰</button>
-    <!-- Dark mode toggle -->
     <button id="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
 
-    <!-- Brand / Site title -->
+    
     <div class="nav-brand">
       <a href="{{ url_for('index') }}">Holiday Club</a>
     </div>
 
-    <!-- Navigation links -->
+  
     <ul class="nav-links" id="nav-links">
       <li><a href="{{ url_for('index') }}">Home</a></li>
       <li><a href="{{ url_for('about') }}">About</a></li>
@@ -54,16 +52,16 @@
       {% endif %}
     {% endwith %}
 
-    <!-- PAGE CONTENT -->
+  
     {% block content %}{% endblock %}
   </div>
 
-  <!-- FOOTER -->
+
   <footer>
     <p>© 2025 Holiday Club. All Rights Reserved.</p>
   </footer>
 
-  <!-- OPTIONAL JS FOR TOGGLERS -->
+
   <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>

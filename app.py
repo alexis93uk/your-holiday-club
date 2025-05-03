@@ -23,7 +23,7 @@ app.config['SECRET_KEY'] = secret
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_PERMANENT'] = False
 
-# Path to SQLite DB (override with DATABASE env var if desired)
+# Path to SQLite DB 
 DATABASE = os.getenv('DATABASE', 'holiday_club.db')
 
 
@@ -68,7 +68,7 @@ def seed_data():
     """
     conn = get_db_connection()
 
-    # 1) Ensure default_user exists (won't error if already there)
+    # 1) Ensure default_user exists 
     conn.execute(
         "INSERT OR IGNORE INTO users (username, email, password_hash) "
         "VALUES (?, ?, ?)",

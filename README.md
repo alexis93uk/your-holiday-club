@@ -12,11 +12,11 @@ Holiday Club is a community-driven Flask web application where travelers registe
 2. [User Stories](#user-stories)  
 3. [Features](#features)  
 4. [Technologies](#technologies)  
-5. [Database Structure & 1.4 Criterion](#database-structure--14-criterion)  
-6. [Data Model & 2.1/2.2 Criteria](#data-model--21-22-criteria)  
-7. [Manual Testing & 1.5 Criterion](#manual-testing--15-criterion)  
+5. [Database Structure](#database-structure)  
+6. [Data Model](#data-model)  
+7. [Manual Testing](#manual-testing)  
 8. [Code Validation](#code-validation)  
-9. [Deployment & 4.3 Criterion](#deployment--43-criterion)  
+9. [Deployment](#deployment)  
 10. [Installation & Usage (Local)](#installation--usage-local)  
 11. [License](#license)  
 
@@ -70,7 +70,7 @@ It fosters a collaborative environment for sharing travel experiences and tips.
 
 ---
 
-## Database Structure & 1.4 Criterion
+## Database Structure
 
 This relational schema satisfies the requirement for relevant, normalized tables with proper foreign-key relationships:
 
@@ -93,7 +93,7 @@ Each story belongs to exactly one user. We seed a `default_user` on first run an
 
 ---
 
-## Data Model & 2.1/2.2 Criteria
+## Data Model
 
 Below is an ER diagram illustrating tables, keys, and relationships:
 
@@ -112,7 +112,7 @@ Below is an ER diagram illustrating tables, keys, and relationships:
 
 ---
 
-## Manual Testing & 1.5 Criterion
+## Manual Testing
 
 | Area               | Test Case             | Steps                                                                                                 | Expected Result                                                          |
 |--------------------|-----------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
@@ -142,7 +142,7 @@ Below is an ER diagram illustrating tables, keys, and relationships:
 
 ---
 
-## Deployment & 4.3 Criterion
+## Deployment
 
 Documenting the full Heroku deployment process:
 
