@@ -31,13 +31,13 @@ DATABASE = os.getenv('DATABASE', 'holiday_club.db')
 def get_db_connection():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
-    # ensure FKs are enforced
+    # ensure foreign keys are enforced
     conn.execute('PRAGMA foreign_keys = ON;')
     return conn
 
 
 def init_db():
-    """Create users and stories tables (if they don’t exist)."""
+    """Create users and stories tables if they don’t exist."""
     conn = get_db_connection()
     conn.execute('''
         CREATE TABLE IF NOT EXISTS users (
@@ -107,11 +107,9 @@ def seed_data():
     conn.close()
 
 
-# ----- Run ONCE before the very first request (e.g. under Gunicorn) -----
-@app.before_first_request
-def setup_db():
-    init_db()
-    seed_data()
+# ----- Immediately ensure DB is initialized & seeded on startup -----
+init_db()
+seed_data()
 
 
 # ----- Authentication Helpers -----
