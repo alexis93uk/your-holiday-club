@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Welcome to Holiday Club</h1>
-<p>Share your travel experiences, inspire others, and discover new places to visit!</p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Welcome to Holiday Club</h1>
+    <p>Share your travel experiences, inspire others, and discover new places to visit!</p>
+    <a href="{{ url_for('view_story') }}" class="btn">View Stories</a>
+  </section>
 
-<div class="image-gallery">
-    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Holiday Destination 1">
-    <img src="{{ url_for('static', filename='images/image2.jpg') }}" alt="Holiday Destination 2">
-    <img src="{{ url_for('static', filename='images/image3.jpg') }}" alt="Holiday Destination 3">
-    <img src="{{ url_for('static', filename='images/image4.jpg') }}" alt="Holiday Destination 4">
-</div>
-
+  <!-- Gallery Grid (no extra wrapper or heading) -->
+  <div class="gallery-grid">
+    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Destination 1">
+    <img src="{{ url_for('static', filename='images/image2.jpg') }}" alt="Destination 2">
+    <img src="{{ url_for('static', filename='images/image3.jpg') }}" alt="Destination 3">
+    <img src="{{ url_for('static', filename='images/image4.jpg') }}" alt="Destination 4">
+  </div>
 {% endblock %}

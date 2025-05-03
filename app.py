@@ -1,20 +1,52 @@
 import os
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import (
+    Flask, render_template, request, redirect,
+    url_for, flash, session, g
+)
 from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 
-# Load environment variables from .env (SECRET_KEY, DATABASE, etc.)
+# Load environment variables
 load_dotenv()
 
+# ----- App Configuration -----
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'change_this_in_production')
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_PERMANENT'] = False
 
-# Database file path (can be overridden via env var)
+# Path to SQLite DB (override with DATABASE env var if desired)
 DATABASE = os.getenv('DATABASE', 'holiday_club.db')
 
 
+# ----- Authentication Helpers -----
+def login_required(f):
+    @wraps(f)
+    def wrapped(*args, **kwargs):
+        if 'user_id' not in session:
+            flash("Please log in first.", "error")
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return wrapped
+
+
+@app.before_request
+def load_logged_in_user():
+    """Load user object into g.user if logged in."""
+    user_id = session.get('user_id')
+    g.user = None
+    if user_id:
+        conn = get_db_connection()
+        g.user = conn.execute(
+            "SELECT * FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
+        conn.close()
+
+
+# ----- Database Helpers -----
 def get_db_connection():
-    """Create a new database connection with foreign keys enabled."""
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
     conn.execute('PRAGMA foreign_keys = ON;')
@@ -22,13 +54,15 @@ def get_db_connection():
 
 
 def init_db():
-    """Initialize the database tables: users and stories."""
+    """Create users and stories tables (if they don’t exist)."""
     conn = get_db_connection()
+
     conn.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
-            email TEXT NOT NULL
+            username TEXT NOT NULL UNIQUE,
+            email TEXT NOT NULL,
+            password_hash TEXT NOT NULL
         );
     ''')
     conn.execute('''
@@ -46,21 +80,19 @@ def init_db():
 
 def seed_data():
     """
-    Seed a default user and sample stories linked to that user.
-    This runs once if tables are empty.
+    Seed a default user and some sample stories if the DB is empty.
     """
     conn = get_db_connection()
 
-    # 1) Ensure a default user exists
+    # 1) Default user
     user = conn.execute(
         "SELECT id FROM users WHERE username = ?",
         ("default_user",)
     ).fetchone()
-
     if user is None:
         conn.execute(
-            "INSERT INTO users (username, email) VALUES (?, ?)",
-            ("default_user", "user@example.com")
+            "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
+            ("default_user", "user@example.com", generate_password_hash("password"))
         )
         conn.commit()
         user = conn.execute(
@@ -70,12 +102,11 @@ def seed_data():
 
     user_id = user['id']
 
-    # 2) Seed sample stories for that user if none exist
+    # 2) Sample stories
     count = conn.execute(
         "SELECT COUNT(*) AS c FROM stories WHERE user_id = ?",
         (user_id,)
     ).fetchone()['c']
-
     if count == 0:
         sample_stories = [
             (user_id, "Paris, France",
@@ -99,10 +130,69 @@ def seed_data():
     conn.close()
 
 
-# -------------------
-# ROUTE HANDLERS
-# -------------------
+# ----- Authentication Routes -----
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        uname = request.form['username']
+        email = request.form['email']
+        pwd   = request.form['password']
+        if not uname or not email or not pwd:
+            flash("All fields are required.", "error")
+            return redirect(url_for('register'))
 
+        conn = get_db_connection()
+        existing = conn.execute(
+            "SELECT id FROM users WHERE username = ?", (uname,)
+        ).fetchone()
+        if existing:
+            flash("Username already taken.", "error")
+            conn.close()
+            return redirect(url_for('register'))
+
+        pw_hash = generate_password_hash(pwd)
+        conn.execute(
+            "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
+            (uname, email, pw_hash)
+        )
+        conn.commit()
+        conn.close()
+
+        flash("Registration successful! Please log in.", "success")
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        uname = request.form['username']
+        pwd   = request.form['password']
+        conn = get_db_connection()
+        user = conn.execute(
+            "SELECT * FROM users WHERE username = ?", (uname,)
+        ).fetchone()
+        conn.close()
+        if user and check_password_hash(user['password_hash'], pwd):
+            session.clear()
+            session['user_id'] = user['id']
+            flash(f"Welcome, {user['username']}!", "success")
+            return redirect(url_for('index'))
+        flash("Invalid credentials.", "error")
+        return redirect(url_for('login'))
+
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash("You’ve been logged out.", "success")
+    return redirect(url_for('index'))
+
+
+# ----- Main Routes -----
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -116,11 +206,7 @@ def about():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        # Collect contact form fields
-        name = request.form.get('name')
-        email = request.form.get('email')
-        message = request.form.get('message')
-        # Flash acknowledgement
+        # We’re just flashing (no persistence)
         flash("Thank you for your message. We'll get back to you soon!", "success")
         return redirect(url_for('contact'))
     return render_template('contact.html')
@@ -158,23 +244,20 @@ def story_detail(story_id):
 
 
 @app.route('/addstory', methods=['GET', 'POST'])
+@login_required
 def add_story():
     if request.method == 'POST':
-        location   = request.form.get('location')
-        story_text = request.form.get('story_text')
-
-        if not location or not story_text:
-            flash("Please provide both location and story text.", "error")
+        loc = request.form['location']
+        txt = request.form['story_text']
+        if not loc or not txt:
+            flash("Please fill in all fields.", "error")
             return redirect(url_for('add_story'))
 
-        # All new stories by default_user (id=1)
-        user_id = 1
-
         conn = get_db_connection()
-        conn.execute('''
-            INSERT INTO stories (user_id, location, story_text)
-                 VALUES (?, ?, ?)
-        ''', (user_id, location, story_text))
+        conn.execute(
+            "INSERT INTO stories (user_id, location, story_text) VALUES (?, ?, ?)",
+            (g.user['id'], loc, txt)
+        )
         conn.commit()
         conn.close()
 
@@ -185,11 +268,11 @@ def add_story():
 
 
 @app.route('/editstory/<int:story_id>', methods=['GET', 'POST'])
+@login_required
 def edit_story(story_id):
     conn = get_db_connection()
     story = conn.execute(
-        'SELECT * FROM stories WHERE id = ?',
-        (story_id,)
+        'SELECT * FROM stories WHERE id = ?', (story_id,)
     ).fetchone()
 
     if story is None:
@@ -197,11 +280,16 @@ def edit_story(story_id):
         flash("Story not found!", "error")
         return redirect(url_for('view_story'))
 
-    if request.method == 'POST':
-        location   = request.form.get('location')
-        story_text = request.form.get('story_text')
+    # Ownership check
+    if story['user_id'] != g.user['id']:
+        conn.close()
+        flash("You can only modify your own stories.", "error")
+        return redirect(url_for('view_story'))
 
-        if not location or not story_text:
+    if request.method == 'POST':
+        loc = request.form['location']
+        txt = request.form['story_text']
+        if not loc or not txt:
             flash("Please fill out all fields.", "error")
             return redirect(url_for('edit_story', story_id=story_id))
 
@@ -209,7 +297,7 @@ def edit_story(story_id):
             UPDATE stories
                SET location = ?, story_text = ?
              WHERE id = ?
-        ''', (location, story_text, story_id))
+        ''', (loc, txt, story_id))
         conn.commit()
         conn.close()
 
@@ -221,16 +309,22 @@ def edit_story(story_id):
 
 
 @app.route('/deletestory/<int:story_id>', methods=['GET', 'POST'])
+@login_required
 def delete_story(story_id):
     conn = get_db_connection()
     story = conn.execute(
-        'SELECT * FROM stories WHERE id = ?',
-        (story_id,)
+        'SELECT * FROM stories WHERE id = ?', (story_id,)
     ).fetchone()
 
     if story is None:
         conn.close()
         flash("Story not found!", "error")
+        return redirect(url_for('view_story'))
+
+    # Ownership check
+    if story['user_id'] != g.user['id']:
+        conn.close()
+        flash("You can only delete your own stories.", "error")
         return redirect(url_for('view_story'))
 
     if request.method == 'POST':
@@ -244,13 +338,8 @@ def delete_story(story_id):
     return render_template('deletestory.html', story=story)
 
 
-# -------------------
-# MAIN EXECUTION
-# -------------------
-
+# ----- Main Execution -----
 if __name__ == '__main__':
-    # Create tables and seed initial data
     init_db()
     seed_data()
-    # Run the app (debug=False for production)
     app.run(debug=False)

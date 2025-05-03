@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
   <h1>{{ story.location }}</h1>
-  <p><em>by {{ story.username }}</em></p>   <!-- new line -->
+  <p><em>by {{ story.username }}</em></p>
   <p>{{ story.story_text }}</p>
+
   <div class="story-images">
     <img src="{{ url_for('static', filename='images/sample1.jpg') }}" alt="Sample Image 1">
     <img src="{{ url_for('static', filename='images/sample2.jpg') }}" alt="Sample Image 2">
   </div>
+
   <div class="story-actions">
     <a href="{{ url_for('edit_story', story_id=story.id) }}" class="btn">Edit</a>
     <a href="{{ url_for('delete_story', story_id=story.id) }}" class="btn delete">Delete</a>
+    <a href="{{ url_for('view_story') }}" class="btn small">Back to Stories</a>
   </div>
 {% endblock %}
-

@@ -1,44 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <title>Holiday Club</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/styles.css') }}"
+  />
 </head>
 <body>
+  <!-- NAVBAR -->
   <nav class="navbar">
-    <button id="menu-toggle">☰</button>
-    <button id="dark-mode-toggle">🌙</button>
-    <div class="nav-logo">
+    <!-- Mobile menu toggle -->
+    <button id="menu-toggle" aria-label="Toggle menu">☰</button>
+    <!-- Dark mode toggle -->
+    <button id="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+
+    <!-- Brand / Site title -->
+    <div class="nav-brand">
       <a href="{{ url_for('index') }}">Holiday Club</a>
     </div>
-    <ul class="nav-links">
+
+    <!-- Navigation links -->
+    <ul class="nav-links" id="nav-links">
       <li><a href="{{ url_for('index') }}">Home</a></li>
       <li><a href="{{ url_for('about') }}">About</a></li>
       <li><a href="{{ url_for('contact') }}">Contact</a></li>
-      <li><a href="{{ url_for('view_story') }}">View Stories</a></li>
-      <li><a href="{{ url_for('add_story') }}">Add Story</a></li>
+      <li><a href="{{ url_for('view_story') }}">Stories</a></li>
+
+      {% if g.user %}
+        <li><a href="{{ url_for('add_story') }}">Add Story</a></li>
+        <li class="spacer"></li>
+        <li><span class="nav-user">Hi, {{ g.user.username }}</span></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      {% else %}
+        <li class="spacer"></li>
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('register') }}">Register</a></li>
+      {% endif %}
     </ul>
   </nav>
 
+  <!-- FLASH MESSAGES -->
   <div class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        {% for category, message in messages %}
-          <div class="flash-message {{ category }}">{{ message }}</div>
-        {% endfor %}
+        <div class="flashes">
+          {% for category, msg in messages %}
+            <div class="flash {{ category }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
       {% endif %}
     {% endwith %}
-    
-    {% block content %}
-    {% endblock %}
+
+    <!-- PAGE CONTENT -->
+    {% block content %}{% endblock %}
   </div>
 
+  <!-- FOOTER -->
   <footer>
     <p>© 2025 Holiday Club. All Rights Reserved.</p>
   </footer>
 
+  <!-- OPTIONAL JS FOR TOGGLERS -->
   <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-
 </body>
 </html>

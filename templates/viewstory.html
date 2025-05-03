@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>Travel Stories</h1>
-  <ul class="stories-list">
+  <h2>Travel Stories</h2>
+
+  <div class="stories-grid">
     {% for story in stories %}
-      <li>
-        <h2>{{ story.location }}</h2>
-        <p><em>by {{ story.username }}</em></p>    <!-- new line -->
-        <p>{{ story.story_text[:100] }}...</p>
-        <a href="{{ url_for('story_detail', story_id=story.id) }}">Read More</a>
-      </li>
+      <div class="story-card">
+        <h3>{{ story.location }}</h3>
+        <p class="author">by {{ story.username }}</p>
+        <p class="excerpt">{{ story.story_text[:150] }}…</p>
+        <a href="{{ url_for('story_detail', story_id=story.id) }}" class="btn">Read More</a>
+      </div>
+    {% else %}
+      <p>No stories yet. <a href="{{ url_for('add_story') }}">Be the first to add one!</a></p>
     {% endfor %}
-  </ul>
+  </div>
 {% endblock %}
